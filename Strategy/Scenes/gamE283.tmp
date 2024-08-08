@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://cctib4as21glq"]
+
+[ext_resource type="PackedScene" uid="uid://bg535i6n2oxcs" path="res://Scenes/army.tscn" id="1_gldex"]
+[ext_resource type="Texture2D" uid="uid://bufo7vd7l0eue" path="res://Assets/map.jpg" id="2_87ujy"]
+[ext_resource type="Script" path="res://Resources/formation_script.gd" id="3_wwx6x"]
+[ext_resource type="PackedScene" uid="uid://dxng2t2u36dpq" path="res://Scenes/formations.tscn" id="4_xps3r"]
+
+[sub_resource type="Resource" id="Resource_88s31"]
+script = ExtResource("3_wwx6x")
+shape = "formation_line"
+size = 2000
+
+[sub_resource type="Resource" id="Resource_yr8hl"]
+script = ExtResource("3_wwx6x")
+shape = "formation_pig"
+size = 800
+
+[node name="Game" type="Node2D"]
+
+[node name="Map" type="Sprite2D" parent="."]
+texture = ExtResource("2_87ujy")
+
+[node name="Army" parent="." instance=ExtResource("1_gldex")]
+position = Vector2(-117, 67)
+current_formation = SubResource("Resource_88s31")
+
+[node name="Army2" parent="." instance=ExtResource("1_gldex")]
+position = Vector2(100, -71)
+current_formation = SubResource("Resource_yr8hl")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2.2, 2.2)
+
+[node name="Formations" parent="." instance=ExtResource("4_xps3r")]

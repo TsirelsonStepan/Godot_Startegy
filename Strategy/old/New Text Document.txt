@@ -1,0 +1,105 @@
+@onready var raycast = $"../RayCast2D"
+func _on_area_entered(area):
+	await get_tree().process_frame
+	var indexes = []
+	var opponent = area.get_parent()
+	var opponent_position = opponent.position
+	var opponent_rotation = opponent.global_rotation
+	for i in range(shape.polygon.size()):
+		var new_i = $"Polygon2D".scale * _get_vector_in_local(shape.polygon[i], global_rotation)
+		raycast.position = position + new_i
+		raycast.target_position = opponent_position - position - new_i
+		raycast.force_raycast_update()
+		if !raycast.is_colliding():
+			indexes.append(i)
+	for i in indexes:
+		var line = (opponent_position - position).normalized()
+		var direction = _get_vector_in_local(line, global_rotation)
+		shape.polygon[i] -= direction * 2.0
+		collider.polygon[i] -= direction * 2.0
+	_update_area()
+
+func _get_vector_in_local(vector, angle):
+	var x = vector.x * cos(angle) - vector.y * sin(angle)
+	var y = vector.x * sin(angle) + vector.y * cos(angle)
+	return Vector2(x, y)
+
+
+
+
+	for i in range(vertexes.size()):
+		var opponent_shape = area.get_parent().get_node("Polygon2D")
+		var min_dist = 1000000.0
+		var goal_position
+		for j in opponent_shape.polygon:
+			var x = j.x * cos(opponent_rotation) - j.y * sin(opponent_rotation)
+			var y = j.x * sin(opponent_rotation) + j.y * cos(opponent_rotation)
+			var new_j = opponent_shape.scale * Vector2(x, y)
+			var dist = ((opponent_position + new_j) - (position + vertexes[i])).length()
+			if dist < min_dist:
+				min_dist = dist
+				goal_position = opponent_position + new_j
+		shape.polygon[indexes[i]] = goal_position - position
+		#_update_area()
+		await get_tree().process_frame
+		collider.polygon[indexes[i]] = goal_position - position
+	#%TimeControl.time_speed = 0.0
+
+
+
+#
+#func _draw_rotation_path(army):
+	#if (armies_paths.has(army.name)):
+		#$"../Armies"._stop_army_move(army)
+	#is_drawing = true
+	#var arrow = Line2D.new()
+	#add_child(arrow)
+	#arrow.name = army.name
+	#arrow.add_point(army.position)
+	#arrow.add_point(_get_mouse_point_on_map().normalized() * 10.0)
+	#while (!Input.is_action_pressed("left_click")):
+		#arrow.set_point_position(1, _get_mouse_point_on_map().normalized() * 10.0)
+		#await get_tree().process_frame
+		#if (Input.is_action_just_pressed("cancel")):
+			#arrow.queue_free()
+			#return
+
+
+#@onready var raycast = $"../RayCast2D"
+#func _on_area_entered(area):
+	#$"..".stopped_armies.append(name)
+	#var vertexes = []
+	#for i in collider.polygon:
+		#var O = global_rotation
+		#var x = i.x * cos(O) - i.y * sin(O)
+		#var y = i.x * sin(O) + i.y * cos(O)
+		#var new_i = $"Polygon2D".scale * Vector2(x, y)
+		#raycast.position = position + new_i
+		#raycast.target_position = area.get_parent().position - position - new_i
+		#raycast.force_raycast_update()
+		#if !raycast.is_colliding():
+			#vertexes.append(new_i)
+	#position += (position - area.get_parent().position).normalized()
+
+
+#func _on_army_collision(area):
+	#if ($"../../Paths".armies_paths.has(name)):
+		#$"..".stopped_armies.append(name)
+	#$"../../Paths"._cancel_army_movement(self)
+#@onready var shape_raycast = $"../../ShapeRaycast"
+#func _on_area_2d_area_shape_entered(_area_rid, area, _area_shape_index, _local_shape_index):
+	#for i in range(shape.polygon.size()):
+		#shape_raycast.position = position + shape.polygon[i]
+		#shape_raycast.target_position = area.get_parent().position - position - shape.polygon[i]
+		#shape_raycast.force_raycast_update()
+		#if (!shape_raycast.is_colliding()):
+			#var opponent = area.get_node("../Polygon2D").polygon
+			#var min_dist = 1000.0
+			#var goal_vertex
+			#for j in range(opponent.size()):
+				#var dist = (opponent[j] - shape.polygon[i]).length()
+				#if (dist < min_dist):
+					#min_dist = dist
+					#goal_vertex = opponent[j]
+			#shape.polygon[i] += goal_vertex / 2.0
+			#collider.polygon[i] += goal_vertex / 2.0

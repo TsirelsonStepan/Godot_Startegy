@@ -1,0 +1,202 @@
+[gd_scene load_steps=22 format=3 uid="uid://d05ahwuq1oy7x"]
+
+[ext_resource type="Texture2D" uid="uid://bufo7vd7l0eue" path="res://Assets/map.jpg" id="1_edop3"]
+[ext_resource type="Script" path="res://Scripts/paths_script.gd" id="2_p25al"]
+[ext_resource type="Script" path="res://Scripts/armies_script.gd" id="3_p4q7d"]
+[ext_resource type="PackedScene" uid="uid://bg535i6n2oxcs" path="res://Scenes/army.tscn" id="3_vvhoc"]
+[ext_resource type="PackedScene" uid="uid://dxng2t2u36dpq" path="res://Scenes/formations.tscn" id="5_63t5t"]
+[ext_resource type="PackedScene" uid="uid://dm0vbbfaame3b" path="res://Scenes/enemy.tscn" id="5_hgc3q"]
+[ext_resource type="Theme" uid="uid://bv23gqkxfauby" path="res://Assets/main_theme.tres" id="7_61n0r"]
+[ext_resource type="Script" path="res://Scripts/action_buttons_script.gd" id="8_u4yjs"]
+[ext_resource type="Texture2D" uid="uid://y2aicsfbcpg3" path="res://Assets/Icons/cb53ce1e1046ed2938562d1bc9ade728.jpg" id="8_x10iu"]
+[ext_resource type="Script" path="res://Scripts/time_script.gd" id="10_fbota"]
+[ext_resource type="Script" path="res://Scripts/time_buttons_script.gd" id="10_j627s"]
+[ext_resource type="Texture2D" uid="uid://dggynvp13f3i2" path="res://Assets/Icons/27e16916b812e2e95fc4bfb65e654a62.png" id="10_ktc8n"]
+[ext_resource type="Texture2D" uid="uid://df1bcg05pb5og" path="res://Assets/army_texture.png" id="10_urfed"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_movns"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6trrp"]
+viewport_path = NodePath("MapPlane/PlaneViewport")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5mo7"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(291, 100, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5yov"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(290, 164, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n4b76"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(73, 98, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q55uv"]
+atlas = ExtResource("10_ktc8n")
+region = Rect2(256, 225, 60, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvxfg"]
+atlas = ExtResource("10_ktc8n")
+region = Rect2(250, 89, 60, 60)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t6ima"]
+atlas = ExtResource("10_ktc8n")
+region = Rect2(346, 89, 60, 60)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 4.33415, -3)
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866026, 0, -0.866026, 0.5, 0, 1.5, 4)
+fov = 90.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_movns")
+
+[node name="MapPlane" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.01, 0)
+texture = SubResource("ViewportTexture_6trrp")
+
+[node name="PlaneViewport" type="SubViewport" parent="MapPlane"]
+transparent_bg = true
+size = Vector2i(3600, 2404)
+size_2d_override_stretch = true
+
+[node name="Map" type="Sprite2D" parent="MapPlane/PlaneViewport"]
+position = Vector2(1800, 1202)
+scale = Vector2(4, 4)
+texture = ExtResource("1_edop3")
+
+[node name="RayCast2D" type="RayCast2D" parent="MapPlane/PlaneViewport"]
+target_position = Vector2(0, 0.01)
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="Paths" type="Node2D" parent="MapPlane/PlaneViewport"]
+unique_name_in_owner = true
+script = ExtResource("2_p25al")
+
+[node name="Armies" type="Node2D" parent="MapPlane/PlaneViewport"]
+script = ExtResource("3_p4q7d")
+
+[node name="Army1" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("3_vvhoc")]
+position = Vector2(1800, 1502)
+formation = "Line"
+size = 1000
+
+[node name="Enemy" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("5_hgc3q")]
+position = Vector2(1800, 1602)
+scale = Vector2(2, 2)
+
+[node name="Formations" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("5_63t5t")]
+unique_name_in_owner = true
+
+[node name="RayCast2D" type="RayCast2D" parent="MapPlane/PlaneViewport/Armies"]
+collide_with_areas = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport"]
+clip_contents = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -34.0
+offset_right = 102.0
+grow_vertical = 0
+theme = ExtResource("7_61n0r")
+script = ExtResource("8_u4yjs")
+
+[node name="MovementButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_t5mo7")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="RotationButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_u5yov")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="FormationButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_n4b76")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="TimeButtons" type="HBoxContainer" parent="SubViewportContainer/SubViewport"]
+clip_contents = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -27.0
+offset_top = -54.0
+offset_right = 27.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(0, 54)
+theme = ExtResource("7_61n0r")
+script = ExtResource("10_j627s")
+
+[node name="Speed0" type="TextureButton" parent="SubViewportContainer/SubViewport/TimeButtons"]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_q55uv")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="Speed1" type="TextureButton" parent="SubViewportContainer/SubViewport/TimeButtons"]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_cvxfg")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="Speed2" type="TextureButton" parent="SubViewportContainer/SubViewport/TimeButtons"]
+layout_mode = 2
+texture_normal = SubResource("AtlasTexture_t6ima")
+texture_disabled = ExtResource("10_urfed")
+stretch_mode = 0
+
+[node name="PopupMenu" type="PopupMenu" parent="SubViewportContainer/SubViewport"]
+title = "Formations"
+
+[node name="TimeControl" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("10_fbota")
+
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/MovementButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_move_button_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/RotationButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_rotate_button_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/FormationButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_formation_button_toggled"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TimeButtons/Speed0" to="SubViewportContainer/SubViewport/TimeButtons" method="_on_speed_0_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TimeButtons/Speed1" to="SubViewportContainer/SubViewport/TimeButtons" method="_on_speed_1_pressed"]
+[connection signal="pressed" from="SubViewportContainer/SubViewport/TimeButtons/Speed2" to="SubViewportContainer/SubViewport/TimeButtons" method="_on_speed_2_pressed"]
+[connection signal="index_pressed" from="SubViewportContainer/SubViewport/PopupMenu" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_popup_menu_index_pressed"]
+[connection signal="popup_hide" from="SubViewportContainer/SubViewport/PopupMenu" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_popup_menu_popup_hide"]

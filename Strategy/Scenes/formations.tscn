@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxng2t2u36dpq"]
+
+[ext_resource type="Script" path="res://Scripts/formations_script.gd" id="1_wdsfc"]
+
+[node name="Formations" type="Node"]
+script = ExtResource("1_wdsfc")
+
+[node name="Attack" type="Node" parent="."]
+
+[node name="Pig" type="Polygon2D" parent="Attack"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -12, -16, -16, -12, -20, -8, -24, -4, -28, 0, -32, 4, -28, 8, -24, 12, -20, 16, -16, 20, -12, 24, -8, 28, -4, 32, 0, 32, 4.14461, 32, 8, 28, 8, 24, 8, 16, 8, 12, 8, 8, 8, 0, 8, -8.12922, 8, -12, 8, -16, 8, -24, 8, -28, 8, -32, 8, -32, 4, -32, 0, -28, -4)
+
+[node name="Idle" type="Node" parent="."]
+
+[node name="Line" type="Polygon2D" parent="Idle"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -8, -16, -8, -12, -8, -8, -8, -4.29289, -8, 0, -8, 4, -8, 8, -8, 12, -8, 16, -8, 20, -8, 24, -8, 24, -4, 24, 0, 24, 4, 24, 8, 20, 8, 16, 8, 12, 8, 8, 8, 4, 8, 0, 8, -4, 8, -8, 8, -12, 8, -16, 8, -20, 8, -24, 8, -24, 4, -24, 0, -24, -4)
+
+[node name="Defence" type="Node" parent="."]
+
+[node name="Line" type="Polygon2D" parent="Defence"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -8, -16, -8, -12, -8, -8, -8, -4.29289, -8, 0, -8, 4, -8, 8, -8, 12, -8, 16, -8, 20, -8, 24, -8, 24, -4, 24, 0, 24, 4, 24, 8, 20, 8, 16, 8, 12, 8, 8, 8, 4, 8, 0, 8, -4, 8, -8, 8, -12, 8, -16, 8, -20, 8, -24, 8, -24, 4, -24, 0, -24, -4)
+
+[node name="Movement" type="Node" parent="."]
+
+[node name="Line" type="Polygon2D" parent="Movement"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -8, -16, -8, -12, -8, -8, -8, -4.29289, -8, 0, -8, 4, -8, 8, -8, 12, -8, 16, -8, 20, -8, 24, -8, 24, -4, 24, 0, 24, 4, 24, 8, 20, 8, 16, 8, 12, 8, 8, 8, 4, 8, 0, 8, -4, 8, -8, 8, -12, 8, -16, 8, -20, 8, -24, 8, -24, 4, -24, 0, -24, -4)
+
+[node name="Fast" type="Polygon2D" parent="Movement"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -8, -16, -8, -12, -8, -8, -8, -4.29289, -8, 0, -8, 4, -8, 8, -8, 12, -8, 16, -8, 20, -8, 24, -8, 24, -4, 24, 0, 24, 4, 24, 8, 20, 8, 16, 8, 12, 8, 8, 8, 4, 8, 0, 8, -4, 8, -8, 8, -12, 8, -16, 8, -20, 8, -24, 8, -24, 4, -24, 0, -24, -4)
+
+[node name="Rotation" type="Node" parent="."]
+
+[node name="Line" type="Polygon2D" parent="Rotation"]
+visible = false
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -20, -8, -16, -8, -12, -8, -8, -8, -4.29289, -8, 0, -8, 4, -8, 8, -8, 12, -8, 16, -8, 20, -8, 24, -8, 24, -4, 24, 0, 24, 4, 24, 8, 20, 8, 16, 8, 12, 8, 8, 8, 4, 8, 0, 8, -4, 8, -8, 8, -12, 8, -16, 8, -20, 8, -24, 8, -24, 4, -24, 0, -24, -4)

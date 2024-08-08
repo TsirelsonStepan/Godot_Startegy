@@ -1,0 +1,65 @@
+[gd_scene load_steps=9 format=3 uid="uid://d05ahwuq1oy7x"]
+
+[ext_resource type="Texture2D" uid="uid://bufo7vd7l0eue" path="res://Assets/map.jpg" id="1_edop3"]
+[ext_resource type="Script" path="res://Scripts/paths_script.gd" id="2_p25al"]
+[ext_resource type="Script" path="res://Scripts/armies_script.gd" id="3_p4q7d"]
+[ext_resource type="PackedScene" uid="uid://bg535i6n2oxcs" path="res://Scenes/army.tscn" id="3_vvhoc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ko7i4"]
+albedo_texture = ExtResource("1_edop3")
+
+[sub_resource type="QuadMesh" id="QuadMesh_euasp"]
+material = SubResource("StandardMaterial3D_ko7i4")
+size = Vector2(9, 6.01)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_movns"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6trrp"]
+viewport_path = NodePath("MapPlane/PlaneViewport")
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 4.33415, -3)
+light_energy = 0.7
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 5, 2.5)
+fov = 90.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="Map" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_euasp")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Map"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Map/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_movns")
+
+[node name="MapPlane" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.01, 0)
+texture = SubResource("ViewportTexture_6trrp")
+
+[node name="PlaneViewport" type="SubViewport" parent="MapPlane"]
+transparent_bg = true
+size = Vector2i(900, 601)
+size_2d_override_stretch = true
+
+[node name="Paths" type="Node2D" parent="MapPlane/PlaneViewport"]
+script = ExtResource("2_p25al")
+
+[node name="Armies" type="Node2D" parent="MapPlane/PlaneViewport"]
+script = ExtResource("3_p4q7d")
+
+[node name="Army" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("3_vvhoc")]
+position = Vector2(450, 300)
+
+[node name="RayCast2D" type="RayCast2D" parent="MapPlane/PlaneViewport"]
+target_position = Vector2(0, 0.01)
+hit_from_inside = true
+collide_with_areas = true

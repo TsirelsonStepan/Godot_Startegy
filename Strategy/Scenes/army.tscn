@@ -1,0 +1,91 @@
+[gd_scene load_steps=7 format=3 uid="uid://bg535i6n2oxcs"]
+
+[ext_resource type="Shader" path="res://Shaders/army_noise.gdshader" id="1_gke5t"]
+[ext_resource type="Script" path="res://Scripts/army_polygon_script.gd" id="1_hwy4t"]
+[ext_resource type="Texture2D" uid="uid://df1bcg05pb5og" path="res://Assets/army_texture.png" id="2_ysnik"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_7elr4"]
+noise_type = 0
+frequency = 0.003
+fractal_type = 0
+fractal_octaves = 1
+fractal_lacunarity = 1.0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_2h345"]
+seamless = true
+seamless_blend_skirt = 0.4
+noise = SubResource("FastNoiseLite_7elr4")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fqpqg"]
+shader = ExtResource("1_gke5t")
+shader_parameter/offset = 0.02
+shader_parameter/scroll = Vector2(0.05, 0.05)
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_2h345")
+
+[node name="Army" type="Node2D"]
+script = ExtResource("1_hwy4t")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+clip_children = 1
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-24, -8, -12, -8, 0, -8, 12, -8, 24, -8, 24, 0, 24, 8, 12, 8, 0, 8, -12, 8, -24, 8, -24, 0)
+
+[node name="Sprites" type="Node2D" parent="Polygon2D"]
+clip_children = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(48, 48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(-48, 48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(-48, -48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(48, -48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(144, -48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D6" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(144, 48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D7" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(-144, 48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="Sprite2D8" type="Sprite2D" parent="Polygon2D/Sprites"]
+material = SubResource("ShaderMaterial_fqpqg")
+position = Vector2(-144, -48)
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_ysnik")
+
+[node name="BodyCollider" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BodyCollider"]
+polygon = PackedVector2Array(-24, -8, -12, -8, 0, -8, 12, -8, 24, -8, 24, 0, 24, 8, 12, 8, 0, 8, -12, 8, -24, 8, -24, 0)
+
+[connection signal="area_entered" from="BodyCollider" to="." method="_on_area_entered"]
+[connection signal="area_shape_entered" from="BodyCollider" to="." method="_on_body_collider_area_shape_entered"]
+[connection signal="input_event" from="BodyCollider" to="." method="_on_army_area_entered"]

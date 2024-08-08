@@ -1,0 +1,143 @@
+[gd_scene load_steps=18 format=3 uid="uid://d05ahwuq1oy7x"]
+
+[ext_resource type="Texture2D" uid="uid://bufo7vd7l0eue" path="res://Assets/map.jpg" id="1_edop3"]
+[ext_resource type="Script" path="res://Scripts/paths_script.gd" id="2_p25al"]
+[ext_resource type="Script" path="res://Scripts/armies_script.gd" id="3_p4q7d"]
+[ext_resource type="PackedScene" uid="uid://bg535i6n2oxcs" path="res://Scenes/army.tscn" id="3_vvhoc"]
+[ext_resource type="PackedScene" uid="uid://dxng2t2u36dpq" path="res://Scenes/formations.tscn" id="5_63t5t"]
+[ext_resource type="Theme" uid="uid://bv23gqkxfauby" path="res://Assets/main_theme.tres" id="7_61n0r"]
+[ext_resource type="Script" path="res://Resources/formation_resource.gd" id="7_656xq"]
+[ext_resource type="Script" path="res://Scripts/action_buttons_script.gd" id="8_u4yjs"]
+[ext_resource type="Texture2D" uid="uid://y2aicsfbcpg3" path="res://Assets/Icons/cb53ce1e1046ed2938562d1bc9ade728.jpg" id="8_x10iu"]
+[ext_resource type="Texture2D" uid="uid://df1bcg05pb5og" path="res://Assets/army_texture.png" id="10_urfed"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_movns"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_6trrp"]
+viewport_path = NodePath("MapPlane/PlaneViewport")
+
+[sub_resource type="Resource" id="Resource_q7jig"]
+script = ExtResource("7_656xq")
+type = "Defence"
+name = "Line"
+size = 2000
+
+[sub_resource type="Resource" id="Resource_am544"]
+script = ExtResource("7_656xq")
+type = "Movement"
+name = "Line"
+size = 2000
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t5mo7"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(291, 100, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5yov"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(290, 164, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n4b76"]
+atlas = ExtResource("8_x10iu")
+region = Rect2(73, 98, 34, 34)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.5, 0.866025, 0, -0.866025, -0.5, 0, 4.33415, -3)
+directional_shadow_mode = 0
+sky_mode = 1
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866026, 0, -0.866026, 0.5, 0, 2.5, 2.3)
+fov = 90.0
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_movns")
+
+[node name="MapPlane" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.01, 0)
+texture = SubResource("ViewportTexture_6trrp")
+
+[node name="PlaneViewport" type="SubViewport" parent="MapPlane"]
+transparent_bg = true
+size = Vector2i(900, 601)
+size_2d_override_stretch = true
+
+[node name="Map" type="Sprite2D" parent="MapPlane/PlaneViewport"]
+position = Vector2(450.5, 300)
+texture = ExtResource("1_edop3")
+
+[node name="RayCast2D" type="RayCast2D" parent="MapPlane/PlaneViewport"]
+target_position = Vector2(0, 0.01)
+hit_from_inside = true
+collide_with_areas = true
+
+[node name="ShapeRaycast" type="RayCast2D" parent="MapPlane/PlaneViewport"]
+target_position = Vector2(0, 0.01)
+collide_with_areas = true
+
+[node name="Paths" type="Node2D" parent="MapPlane/PlaneViewport"]
+script = ExtResource("2_p25al")
+
+[node name="Armies" type="Node2D" parent="MapPlane/PlaneViewport"]
+script = ExtResource("3_p4q7d")
+
+[node name="Formations" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("5_63t5t")]
+
+[node name="Army1" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("3_vvhoc")]
+position = Vector2(450, 300)
+current_formation = SubResource("Resource_q7jig")
+
+[node name="Army2" parent="MapPlane/PlaneViewport/Armies" instance=ExtResource("3_vvhoc")]
+position = Vector2(450, 400)
+current_formation = SubResource("Resource_am544")
+
+[node name="RayCast2D" type="RayCast2D" parent="MapPlane/PlaneViewport/Armies"]
+collide_with_areas = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+transparent_bg = true
+size = Vector2i(1152, 648)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SubViewportContainer/SubViewport"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -34.0
+offset_right = 102.0
+grow_vertical = 0
+theme = ExtResource("7_61n0r")
+script = ExtResource("8_u4yjs")
+
+[node name="MoveButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_t5mo7")
+
+[node name="RotateButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_u5yov")
+
+[node name="FormationButton" type="TextureButton" parent="SubViewportContainer/SubViewport/HBoxContainer"]
+layout_mode = 2
+toggle_mode = true
+texture_normal = SubResource("AtlasTexture_n4b76")
+texture_pressed = ExtResource("10_urfed")
+
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/MoveButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_move_button_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/RotateButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_rotate_button_toggled"]
+[connection signal="toggled" from="SubViewportContainer/SubViewport/HBoxContainer/FormationButton" to="SubViewportContainer/SubViewport/HBoxContainer" method="_on_formation_button_toggled"]
